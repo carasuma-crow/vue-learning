@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .c {color: red;}
+    </style>
+</head>
+<body>
+    <!--
+        组件系统是 Vue 的另一个重要概念
+        因为它是一种抽象，允许我们使用小型、独立和通常可复用的组件构建大型应用
+        具体的操作：
+            1. 在vue实例中注册（定义）组件 => 相当于【定义组件函数】
+            2. 在html中使用组件对应的标签，代表这个组件 => 相当于【调用函数】，返回html文档
+            3. 可以在注册组件是定义props，表示此组件可以接收的【自定义属性】
+                => 相当于【函数参数定义】。在html文档中传入数据或绑定变量，可以在vue渲染时，将数据填充到页面中
+        
+        实际运用广泛，因为页面代码块通常都是可复用的，区别可以通过参数控制
+    -->
+    <div id="app">
+        <!-- 注意，直接在这个占位标签里面写内容是没用的（属性可以生效） -->
+        <!-- <myspan1>123</myspan1> -->
+        <myspan1 class="c"></myspan1>
+        <hr/>
+        <!-- 不传参的时候 -->
+        <mypara1></mypara1>
+        <!-- 直接绑定字符串 -->
+        <mypara1 x1="apple" y1="banana"></mypara1>
+        <!-- 结合v-bind，绑定变量，在vue实例中控制 -->
+        <mypara1 :x1="x1" :y1="y1"></mypara1>
+        <hr/>
+        <!-- for循环结合绑定变量 -->
+        <!-- 需要注意带上key属性，保证节点的唯一性，否则在某些场景下会出现问题（后面会遇到，先记下来） -->
+        <mypara1 v-for="item in paraList" :x1="item.x1" :y1="item.y1" :key="item.id"></mypara1>
+    </div>
+
+    <script>
+        // 定义组件
+        Vue.component('myspan1', {
+            template: '<span>span1文本</span>'
+        })
+
+        // 含props的组件
+        Vue.component('mypara1', {
+            // 表示mypara1标签接受x1和y1两个参数
+            props: ['x1', 'y1'],
+            template: '<p>x1 = {{ x1 }} , y1 = {{ y1 }}</p>'
+        })
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                x1: 'orange',
+                y1: 'milk',
+                paraList: [
+                    { id: 1, x1: '苹果', y1: '鸡腿' },
+                    { id: 2, x1: '香蕉', y1: '鸭腿' },
+                    { id: 3, x1: '菠萝', y1: '叉烧' },
+                    { id: 4, x1: '葡萄', y1: '鱼' }
+                ]
+            }
+        })
+    </script>
+</body>
+</html>

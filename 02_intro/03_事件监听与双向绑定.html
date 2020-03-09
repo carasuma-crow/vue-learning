@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- v-on, v-model, method -->
+
+    <!--
+        可以用【v-on】指令添加一个事件监听器，通过它调用在 Vue 实例中定义的方法
+        Vue实例的方法需要在methods中定义，在方法体中可以通过this来访问修改data中的数据
+
+        通过上述方法，可以无需操作DOM节点，即可改变DOM中的内容
+
+        之前在02-01中用到的单向绑定，可以通过js的vue实例中的变量改变DOM的内容
+        但在一些【表单应用】中，需要获取用户输入作为参数传到后端或其他页面，这就需要【双向绑定】
+        Vue 提供了【v-model】指令，它能轻松实现表单输入和应用状态之间的双向绑定
+    -->
+
+    <div id="app">
+        <p>{{ message }}</p>
+        <!-- v-on: 可以省略为 @ -->
+        <button v-on:click="reverseMessage">反转消息</button>
+        <button @click="reverseMessage">反转消息</button>
+        <hr/>
+
+        输入可以改变上面的文字，因为有双向绑定： <input v-model="message" />
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!'
+            },
+            methods: {
+                // ES6规范，对象中的方法可以简写
+                // https://es6.ruanyifeng.com/#docs/object#%E5%B1%9E%E6%80%A7%E7%9A%84%E7%AE%80%E6%B4%81%E8%A1%A8%E7%A4%BA%E6%B3%95
+                reverseMessage() {
+                    // 字符串反转
+                    this.message = this.message.split('').reverse().join('')
+                }
+            }
+        })
+    </script>
+</body>
+</html>

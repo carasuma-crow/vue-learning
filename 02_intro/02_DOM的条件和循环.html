@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- keyword: v-if, v-for -->
+
+    <div id="app">
+        <!-- 控制DOM节点（v-if=false时，此节点会被删掉，而并非display: none） -->
+        <p v-if="seen">现在你看到我了</p>
+
+        <!-- 循环显示列表 -->
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ol>
+    </div>
+
+    <script>
+        // 尝试app.seen=false => DOM节点被删除
+        // 尝试app.todos.push({ text: 'testtest' }) => 列表追加一项  4. testtest
+        // 尝试app.todos.pop() => 列表最后一项被删除
+        var app = new Vue({
+            el: '#app',
+            data: {
+                seen: true,
+                todos: [
+                    { text: '学习 JavaScript' },
+                    { text: '学习 Vue' },
+                    { text: '整个牛项目' }
+                ]
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- keyword: v-bind, el, data -->
+
+    <!--
+        由于app2已经在全局定义了，所以在浏览器控制台中可以直接使用
+        Vue实例的data中的内容，可以直接用实例变量名.内容key名获取，如： app2.message == app2.$data.message
+        
+        【单向绑定】
+        以下例子表示： #app-2的message变量是绑定了js中的data.message值
+        （data.message变化会导致DOM内容变化）
+
+        在浏览器控制台中，输入app2.message可以快速查看和修改js变量值，并同步改变DOM内容
+        （但是直接改变DOM节点的内容值，不会改变js变量，因为不是双向绑定）
+
+        v-bind:title解析
+        【v-】开头的html标签属性是 Vue 提供的特殊 attribute
+        【v-bind:】表示此属性的值受vue示例中的变量控制
+        【v-bind:title="message"】表示title这个属性受到app2.message控制（单向绑定）
+    -->
+
+
+    <div id="app-2">
+        <span v-bind:title="message">
+            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+        </span>
+        <br>
+        <!-- v-bind: 可以省略写作 : -->
+        <span :title="message">
+            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+        </span>
+    </div>
+
+    <script>
+        // 可以尝试在浏览器控制台修改app2.message值，再悬停看看结果
+        var app2 = new Vue({
+            el: '#app-2',
+            data: {
+                message: '页面加载于 ' + new Date().toLocaleString()
+            }
+        })
+    </script>
+</body>
+
+</html>
