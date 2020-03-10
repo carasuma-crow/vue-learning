@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--  -->
+    </div>
+
+    <script>
+        /*
+            每个 Vue 应用都是通过用 Vue 函数创建一个新的 Vue 实例开始的
+            其中参数是一个【选项对象】，这里主要研究对象中的属性用法
+
+            一个 Vue 应用由一个通过 new Vue 创建的【根 Vue 实例】，以及可选的嵌套的、可复用的组件树组成
+            上面说到的组件树也都是Vue实例，接受相同的选项对象(一些根实例特有的选项除外)
+
+            【data属性】
+                当一个 Vue 实例被创建时，它将 data 对象中的所有的属性加入到 Vue 的响应式系统中
+                当这些属性的值发生改变时，视图将会产生“响应”（即【进行重渲染】），即匹配更新为新的值
+
+                这里注意：只有当实例被创建时就【已经存在】于 data 中的属性才是响应式的
+                    如果你添加一个新的属性，此属性的改动将不会触发任何视图的更新
+                    （可以通过设置一些无意义的初始值，便于跟踪触发更新）
+                    如：
+                        data: {
+                            newTodoText: '',
+                            visitCount: 0,
+                            hideCompletedTodos: false,
+                            todos: [],
+                            error: null
+                        }
+
+            【Vue实例的属性和方法】
+                除了数据属性，Vue 实例还暴露了一些有用的实例属性与方法
+                它们都有前缀 $，以便与用户定义的属性区分开来
+        */
+        
+        var data = { a: 1 }
+
+        var vm = new Vue({
+            el: '#app',
+            data: data
+        })
+
+        // API参考： https://cn.vuejs.org/v2/api/#%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7
+        vm.$data === data // => true
+        vm.$el === document.getElementById('example') // => true
+        // $watch 是一个实例方法
+        vm.$watch('a', function (newValue, oldValue) {
+            // 这个回调将在 `vm.a` 改变后调用
+            console.log(`a从 ${oldValue} 变成 ${newValue}`)
+        })
+
+    </script>
+</body>
+</html>

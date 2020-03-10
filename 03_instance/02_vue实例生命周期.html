@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <img src="./lifecycle.png" />
+    </div>
+
+    <script>
+        /*
+            每个 Vue 实例在被创建时都要经过一系列的初始化过程
+            例如，需要设置数据监听、编译模板、将实例挂载到 DOM 并在数据变化时更新 DOM 等
+            => 每个【生命周期】的节点上，都可以触发执行自定义的函数 => 【生命周期钩子函数】
+
+            首先，这些【生命周期钩子函数】定义在实例对象的第一级（与el, data同级）
+            分别有如下函数（触发时间点按从早到晚排列）：
+                1. beforeCreate
+                2. created
+                3. beforeMount
+                4. mounted
+                5. beforeUpdate
+                6. updated
+                7. beforeDestroy
+                8. destroyed
+            另外，需要特别注意：由于钩子函数的this一般需要指向vue实例，所以约定【不要在选项属性或回调上使用箭头函数】
+        */
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+    </script>
+</body>
+</html>
