@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!--
+        计算属性computed，侦听器watch
+
+        模板内的表达式非常便利，但是设计它们的初衷是用于简单运算的
+        在模板中放入太多的逻辑会让模板过重且难以维护
+
+        所以，如 {{ message.split('').reverse().join('') }} 这种表达式直接放在 html 中的情况，应该尽量避免
+        => 使用计算属性解决问题（在对象中加上computed属性，在里面定义对应的方法，然后直接在html中使用）
+        对于【简单的计算属性（只有getter）】，需要注意的点：
+            1. 创建计算属性reversedMessage相当于默默创建了 vm.reversedMessage 属性并【响应式依赖】于 message
+                （设置的本身对于message没有影响，而message的变化会触发reversedMessage的值的改变）
+            2. computed中的reversedMessage函数 将用作属性 vm.reversedMessage 的 getter 函数
+            3. 另外强行去修改reversedMessage值，会报错说没有对应的 setter
+                （Computed property "reversedMessage" was assigned to but it has no setter.）
+        
+        【重要】计算属性和方法的区别
+            计算属性和方法本质上都是方法，同时也都可以在模板中使用
+                {{ reversedMessage }}   or   {{ reversedMessage() }}
+            区别在于【计算属性是基于它们的响应式依赖进行缓存的】，也就是说依赖不发生变化，计算属性会直接取缓存返回
+                1. 像如下的message反转的例子，应该直接用计算属性（避免重复计算）
+                2. 如果不希望做缓存，如 实时`return Date.now()` 的情况，则使用函数（因为它没有响应式依赖，所以计算一次后不会再重新计算）
+        
+        【拥有getter和setter的计算属性】
+            通过如下fullName的定义方式，可以设置get/set方法
+
+        侦听器watch
+            watch属性是和computed同级的，具体例子如下fullName2
+            这个例子看上去比计算属性要愚蠢，但是实际上由于watch比较通用，有更深层的流程控制，所以也会用到
+                【当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的】
+                具体可以结合例子，理解debounce, throttle （前端性能优化，防止过度请求和计算）
+                https://cn.vuejs.org/v2/guide/computed.html#%E4%BE%A6%E5%90%AC%E5%99%A8
+                https://www.jianshu.com/p/daaa36174324
+    -->
+    <div id="app">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+        <hr>
+        <p>fullname: {{ fullName }}</p>
+        <p>fullname2: {{ fullName2 }}</p>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                firstName: 'Bruce',
+                lastName: 'Lee',
+                fullName2: ''
+            },
+            computed: {
+                reversedMessage() {
+                    // this指向Vue实例
+                    return this.message.split('').reverse().join('')
+                },
+                // 注意这是一个属性，而不是一个方法
+                fullName: {
+                    get() {
+                        return this.firstName + ' ' + this.lastName
+                    },
+                    // setter方法的设置（接收一个参数）
+                    set(name) {
+                        // 这里可以对firstName, lastName进行反向赋值
+                        [ this.firstName, this.lastName ] = name.split(' ')
+                        // 不需要返回值
+                    }
+                }
+            },
+            // 侦听存在的属性的变化
+            watch: {
+                firstName: function (val) {
+                    // 这里可以写很多的逻辑，比computed的方式要复杂但是更通用
+                    this.fullName2 = val + ' ' + this.lastName
+                },
+                lastName: function (val) {
+                    this.fullName2 = this.firstName + ' ' + val
+                }
+            }
+        })
+    </script>
+</body>
+</html>
