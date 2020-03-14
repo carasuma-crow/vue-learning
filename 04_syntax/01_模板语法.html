@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!--
+        ## 插值
+            1. 文本
+                一般的插值（随msg变量的变化而改变显示）： {{ msg }}
+                一次性插值（不随msg变量的变化而改变显示）： <span v-once>这个将不会改变: {{ msg }}</span>
+            2. html（注意防范XSS攻击，绝不要对用户提供的内容使用插值）
+                <span v-html="rawHtml"></span>
+            3. 标签属性
+                前面已经用过的 v-bind ， 或使用简写 :
+                    <p v-bind:title="tip">xxx</p>
+                    <p :title="tip">xxx</p>
+                对于布尔属性 (它们只要存在就意味着值为 true，如 disabled)，如果值为false，则不会被包含在渲染出来的元素中
+            ### 使用 JavaScript 表达式
+                {{ number + 1 }}
+                {{ ok ? 'YES' : 'NO' }}
+                {{ message.split('').reverse().join('') }}
+                <div v-bind:id="'list-' + id"></div>
+
+                模板表达式都被放在沙盒中，只能访问全局变量的一个白名单，如 Math 和 Date
+                你不应该在模板表达式中试图访问用户定义的全局变量
+        ## 指令
+            指令是指带有 v- 前缀的标签属性，它的值的预期是【单个 JavaScript 表达式】 （v-for例外）
+            指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM
+
+            1. 0或1个参数
+                有些指令是不带参数的，如：前面用到的v-once, v-html等
+                有些指令是带1个参数的，如： v-bind, v-on
+                    这些指令用【:】分隔指令和参数，如： v-bind:title, v-on:click
+                    v-bind的参数代表绑定的属性， v-on的参数代表监听的事件
+            2. 动态参数
+                接着上面的【参数】，对于v-bind:title, v-on:click，他们的参数都是写死的（title, click）
+                使用类似这种方式表示动态对参数求值，如： <a v-on:[eventname]="doSomething"> ... </a>
+                其中，当eventname == 'click'时，上面的语句表示 <a v-on:click="doSomething"> ... </a>
+                注意：
+                    1. 动态参数的形参最好是全小写，否则会强制转换造成误解
+                    2. 用计算属性替代这种复杂表达式
+        ## 修饰符
+            在指令后面加上 .xxx 作为修饰符
+                如： 对于 v-on ，v-on:submit.prevent表示对于触发的事件调用 event.preventDefault()
+        ## 缩写
+            1. v-bind == :
+            2. v-on == @
+    -->
+    <div id="app">
+        <!-- 文本 -->
+        msg1: <input type="text" v-model="msg1">
+        <p>msg1 = {{ msg1 }}</p>
+        <p v-once>msg1 = {{ msg1 }}</p>
+        <hr>
+        <!-- html -->
+        msg2: <input type="text" v-model="msg2">
+        <p>msg2 = {{ msg2 }}</p>
+        <!-- 标签里面的内容无效 -->
+        <!-- <p v-html="msg2">aaa</p> -->
+        <p v-html="msg2"></p>
+        <hr>
+        <!-- attribute -->
+        <input type="text" v-model="tip" />
+        <p v-bind:title="tip">hover me!</p>
+        <p :title="tip">hover me!</p>
+        <button :disabled="isButtonDisabled">Button</button>
+        <hr>
+        <!-- 使用JavaScript表达式 -->
+        <p>{{ isButtonDisabled ? '按钮不可点' : '按钮可点击' }}</p>
+
+        <!-- 动态参数 -->
+        <p @click="c1">写死的click事件，普通参数事件触发</p>
+        <!-- 试试 app.dpattrname = "mouseover" -->
+        <p @[dpattrname]="c1">动态参数事件触发</p>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                msg1: 'Hello Vue!',
+                msg2: '<p style="color: red;">红色的字体</p>',
+                tip: '提示语',
+                isButtonDisabled: true,
+                dpattrname: 'click'
+            },
+            methods: {
+                c1() {
+                    console.log('c1')
+                }
+            }
+        })
+    </script>
+</body>
+</html>
